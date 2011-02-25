@@ -1,4 +1,3 @@
-; $Id$
 name = ImageField Tokens
 description = Adds Node tokens to ImageFields ALT and Title text fields.
 dependencies[] = imagefield

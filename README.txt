@@ -1,4 +1,3 @@
-// $Id$
 
 The ImageField Tokens module extends the default functionality of ImageField
 module by adding the ability to use node tokens in the ALT and Title text.
