@@ -1,6 +1,6 @@
 name = ImageField Tokens
-description = Adds Node tokens to ImageFields ALT and Title text fields.
-dependencies[] = imagefield
-dependencies[] = filefield_paths
-package = CCK
-core = 6.x
+description = Adds Node tokens to ImageFields Alt and Title text fields.
+core = 7.x
+package = Fields
+dependencies[] = image
+
