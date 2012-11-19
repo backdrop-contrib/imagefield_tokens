@@ -10,10 +10,10 @@
 function imagefield_tokens_field_info_alter(&$info) {
   $info['image']['instance_settings'] += array(
     'alt_field_default' => '',
-    'alt_field_sync_title' => 1,
+    'alt_field_sync_title' => 0,
     'alt_field_update_on_edit' => 0,
     'title_field_default' => '',
-    'title_field_update_on_edit' => 1,
+    'title_field_update_on_edit' => 0,
   );
 }
 
