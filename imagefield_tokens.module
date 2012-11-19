@@ -182,6 +182,10 @@ function imagefield_tokens_field_attach_presave($entity_type, $entity) {
               }
               $field_data['alt'] = token_replace($field_data['alt'], array($entity_type => $entity), array('sanitize' => TRUE, 'clear' => TRUE));
             }
+
+            // Truncate fields to max allowed length. alt=512, title=1024 per image.install
+            $field_data['title'] = truncate_utf8($field_data['title'], 1024, TRUE, TRUE);
+            $field_data['alt'] = truncate_utf8($field_data['alt'], 512, TRUE, TRUE);
           }
         }
       }
