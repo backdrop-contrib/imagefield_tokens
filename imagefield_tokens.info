@@ -1,5 +1,5 @@
 name = ImageField Tokens
-description = Adds Node tokens to ImageFields Alt and Title text fields.
+description = Adds additional settings to the Image field alt/title attributes.
 core = 7.x
 package = Fields
 dependencies[] = image

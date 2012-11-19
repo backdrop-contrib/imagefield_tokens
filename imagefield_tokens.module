@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @file
- * Implements image alt and title field defaults with support for tokens.
+ * Implements image Alt and Title field defaults with support for tokens.
  */
 
 /**
@@ -18,15 +17,14 @@ function imagefield_tokens_field_info_alter(&$info) {
   );
 }
 
-/*
- * Implements hook_form_FORM_NAME_alter() for field-ui-field-edit-form
+/**
+ * Implements hook_form_FORM_ID_alter() for field-ui-field-edit-form.
  */
 function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
   $field = $form['#field'];
   if ($field['type'] == 'image') {
     $instance = $form['#instance'];
     $settings = $instance['settings'];
-
     $form_settings = &$form['instance']['settings'];
 
     $form_settings['alt_settings'] = array(
@@ -36,13 +34,22 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#parents' => array('instance', 'settings'),
+      '#states' => array(
+        'visible' => array(
+          '#edit-instance-settings-alt-field' => array('checked' => TRUE),
+        ),
+      ),
     );
-
     $form_settings['alt_settings']['alt_field_sync_title'] = array(
       '#type' => 'checkbox',
       '#title' => t('Synchronize with <em>Title</em> field'),
-      '#description' => t('Replaces <em>Alt</em> field value with <em>Title</em> field value during node_save().'),
+      '#description' => t('Replaces <em>Alt</em> field value with the <em>Title</em> field value (below) during node_save().'),
       '#default_value' => $settings['alt_field_sync_title'],
+      '#states' => array(
+        'disabled' => array(
+          '#edit-instance-settings-title-field' => array('checked' => FALSE),
+        ),
+      ),
     );
     $form_settings['alt_settings']['alt_field_update_on_edit'] = array(
       '#type' => 'checkbox',
@@ -65,6 +72,7 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
       );
     }
 
+    $form_settings['title_field']['#weight'] = 12;
     $form_settings['title_settings'] = array(
       '#type' => 'fieldset',
       '#title' => t('<em>Title</em> field settings'),
@@ -72,6 +80,11 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#parents' => array('instance', 'settings'),
+      '#states' => array(
+        'visible' => array(
+          '#edit-instance-settings-title-field' => array('checked' => TRUE),
+        ),
+      ),
     );
     $form_settings['title_settings']['title_field_update_on_edit'] = array(
       '#type' => 'checkbox',
@@ -93,7 +106,6 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
         '#token_types' => array('node'),
       );
     }
-    $form_settings['title_field']['#weight'] = 12;
   }
 }
 
@@ -102,8 +114,7 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
  */
 function imagefield_tokens_field_widget_form_alter(&$element, &$form_state, $context) {
   if ($context['field']['type'] == 'image') {
-    $settings = $context['instance']['settings'];
-
+    //$settings = $context['instance']['settings'];
     foreach (element_children($element) as $delta) {
       $element[$delta]['#process'][] = 'imagefield_tokens_field_widget_process';
     }
@@ -126,25 +137,17 @@ function imagefield_tokens_field_widget_process($element, &$form_state, $form) {
 }
 
 /**
- * Implements hook_preprocess_image_formatter().
- */
-function imagefield_tokens_preprocess_image_formatter(&$variables) {
-  //Tokens during theming, w/o node tokens.
-  //$variables['item']['alt'] = token_replace($variables['item']['alt']);
-  //$variables['item']['title'] = token_replace($variables['item']['title']);
-}
-
-/**
  * Implements hook_field_attach_presave().
  */
 function imagefield_tokens_field_attach_presave($entity_type, $entity) {
   // Includes interation code from _field_invoke().
 
- $options = array(
+  $options = array(
     'default' => FALSE,
     'deleted' => FALSE,
     'language' => NULL,
   );
+
   // Determine the list of instances to iterate on.
   list(, , $bundle) = entity_extract_ids($entity_type, $entity);
   $instances = _field_invoke_get_instances($entity_type, $bundle, $options);
@@ -161,6 +164,7 @@ function imagefield_tokens_field_attach_presave($entity_type, $entity) {
       foreach ($languages as $langcode) {
         foreach ($entity->{$field_name}[$langcode] as &$field_data) {
           $settings = $instance['settings'];
+
           // If ("Update every edit" or title is empty) and a default is specified
           if (($settings['title_field_update_on_edit'] || empty($field_data['title'])) && !empty($settings['title_field_default'])) {
             $field_data['title'] = $settings['title_field_default'];
@@ -182,3 +186,4 @@ function imagefield_tokens_field_attach_presave($entity_type, $entity) {
     }
   }
 }
+
