@@ -76,7 +76,7 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
     $form_settings['title_settings'] = array(
       '#type' => 'fieldset',
       '#title' => t('<em>Title</em> field settings'),
-      '#weight' => 12,
+      '#weight' => 13,
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#parents' => array('instance', 'settings'),
