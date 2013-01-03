@@ -148,12 +148,20 @@ function imagefield_tokens_field_attach_presave($entity_type, $entity) {
     'language' => NULL,
   );
 
+  // Get list of image fields
+  $image_fields = array();
+  foreach (field_info_fields() as $field) {
+    if ($field['type'] == 'image') {
+      $image_fields[] = $field['field_name'];
+    }
+  }
+
   // Determine the list of instances to iterate on.
   list(, , $bundle) = entity_extract_ids($entity_type, $entity);
   $instances = _field_invoke_get_instances($entity_type, $bundle, $options);
 
   foreach ($instances as $instance) {
-    if ($instance['widget']['type'] == 'image_image') {
+    if (in_array($instance['field_name'], $image_fields)) {
       $field_name = $instance['field_name'];
       $field = field_info_field($field_name);
 
