@@ -12,8 +12,10 @@ function imagefield_tokens_field_info_alter(&$info) {
     'alt_field_default' => '',
     'alt_field_sync_title' => 0,
     'alt_field_update_on_edit' => 0,
+    'alt_field_hide' => 0,
     'title_field_default' => '',
     'title_field_update_on_edit' => 0,
+    'title_field_hide' => 0,
   );
 }
 
@@ -57,6 +59,12 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
       '#description' => t('Reevaluate the default value and replace <em>Alt</em> field value after each edit; recommended with tokens. Requires non-empty Default value.'),
       '#default_value' => $settings['alt_field_update_on_edit'],
     );
+    $form_settings['alt_settings']['alt_field_hide'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Hide field'),
+      '#description' => t('Hide the <em>Alt</em> field on node edit forms. Use with a Default value.'),
+      '#default_value' => $settings['alt_field_hide'],
+    );
     $form_settings['alt_settings']['alt_field_default'] = array(
       '#type' => 'textfield',
       '#title' => t('Default value'),
@@ -91,6 +99,12 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
       '#title' => t('Update every edit'),
       '#description' => t('Reevaluate the default value and replace <em>Title</em> field value after each edit; recommended with tokens. Requires non-empty Default value.'),
       '#default_value' => $settings['title_field_update_on_edit'],
+    );
+    $form_settings['title_settings']['title_field_hide'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Hide field'),
+      '#description' => t('Hide the <em>Title</em> field on node edit forms. Use with a Default value.'),
+      '#default_value' => $settings['title_field_hide'],
     );
     $form_settings['title_settings']['title_field_default'] = array(
       '#type' => 'textfield',
@@ -132,6 +146,14 @@ function imagefield_tokens_field_widget_process($element, &$form_state, $form) {
   // Possibly prefill the alt and title fields.
   $element['alt']['#default_value'] = isset($item['alt']) ? $item['alt'] : $settings['alt_field_default'];
   $element['title']['#default_value'] = isset($item['title']) ? $item['title'] : $settings['title_field_default'];
+
+  // Possibly hide the alt and title fields.
+  if ($settings['alt_field_hide']) {
+    $element['alt']['#access'] = FALSE;
+  }
+  if ($settings['title_field_hide']) {
+    $element['title']['#access'] = FALSE;
+  }
 
   return $element;
 }
