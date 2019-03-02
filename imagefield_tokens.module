@@ -97,6 +97,7 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
       $form_settings['alt_settings']['token_help'] = array(
         '#theme' => 'token_tree',
         '#token_types' => $token_types,
+        '#dialog' => TRUE,
       );
     }
 
@@ -138,6 +139,7 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
       $form_settings['title_settings']['token_help'] = array(
         '#theme' => 'token_tree',
         '#token_types' => $token_types,
+        '#dialog' => TRUE,
       );
     }
   }
