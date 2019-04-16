@@ -7,9 +7,5 @@ dependencies[] = token
 
 ; Testing Framework settings.
 files[] = tests/imagefield_tokens.test
-test_dependencies[] = context:context
-test_dependencies[] = image:image
-test_dependencies[] = file:file
 test_dependencies[] = token:token
-test_dependencies[] = simpletest:simpletest
 testing_api = 2.x
