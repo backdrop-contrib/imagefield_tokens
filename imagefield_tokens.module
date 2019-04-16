@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Implements image Alt and Title field defaults with support for tokens.
@@ -77,18 +78,19 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
       $token_types = array();
       if (module_exists('entity')) {
         module_load_include('inc', 'entity', 'entity_token.tokens');
-        // get a full list of token types
+        // Get a full list of token types.
         $token_types_chained = entity_token_types_chained();
-        // get the token type of given entity type
+        // Get the token type of given entity type.
         $token_types[] = array_search($form['#instance']['entity_type'], $token_types_chained);
       }
       else {
         switch ($form['#instance']['entity_type']) {
-          // usually entities have the same token type name as the entity type name
+          // Usually entities have the same token type name
+          // as the entity type name.
           default:
             $token_types[] = $form['#instance']['entity_type'];
             break;
-          // except for taxonomy_term
+          // Except for taxonomy_term.
           case 'taxonomy_term':
             $token_types[] = 'term';
             break;
@@ -150,7 +152,6 @@ function imagefield_tokens_form_field_ui_field_edit_form_alter(&$form, &$form_st
  */
 function imagefield_tokens_field_widget_form_alter(&$element, &$form_state, $context) {
   if ($context['field']['type'] == 'image') {
-    //$settings = $context['instance']['settings'];
     foreach (element_children($element) as $delta) {
       $element[$delta]['#process'][] = 'imagefield_tokens_field_widget_process';
     }
@@ -185,14 +186,13 @@ function imagefield_tokens_field_widget_process($element, &$form_state, $form) {
  */
 function imagefield_tokens_field_attach_presave($entity_type, $entity) {
   // Includes interation code from _field_invoke().
-
   $options = array(
     'default' => FALSE,
     'deleted' => FALSE,
     'language' => NULL,
   );
 
-  // Get list of image fields
+  // Get list of image fields.
   $image_fields = array();
   foreach (field_info_fields() as $field) {
     if ($field['type'] == 'image') {
@@ -218,7 +218,8 @@ function imagefield_tokens_field_attach_presave($entity_type, $entity) {
           foreach ($entity->{$field_name}[$langcode] as &$field_data) {
             $settings = $instance['settings'];
 
-            // If ("Update every edit" or title is empty) and a default is specified
+            // If ("Update every edit" or title is empty)
+            // and a default is specified.
             if (($settings['title_field_update_on_edit'] || empty($field_data['title'])) && !empty($settings['title_field_default'])) {
               $field_data['title'] = $settings['title_field_default'];
             }
@@ -238,7 +239,8 @@ function imagefield_tokens_field_attach_presave($entity_type, $entity) {
                 $field_data['alt'] = token_replace($field_data['alt'], array($entity_type => $entity), array('sanitize' => TRUE, 'clear' => TRUE));
               }
             }
-            // Truncate fields to max allowed length. alt=512, title=1024 per image.install
+            // Truncate fields to max allowed length.
+            // alt=512, title=1024 per image.install.
             if (isset($field_data['title'])) {
               $field_data['title'] = truncate_utf8($field_data['title'], 1024, TRUE, TRUE);
               $field_data['title'] = htmlspecialchars_decode($field_data['title'], ENT_QUOTES | ENT_HTML401);
