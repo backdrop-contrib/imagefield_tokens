@@ -255,24 +255,28 @@ function imagefield_tokens_field_attach_presave($entity_type, $entity) {
     }
   }
 }
-  
-  /**
-   * Provides help notes related to the module functionality.
-   *
-   * @param $path
-   * @param $arg
-   * @return array|mixed|string|null
-   */
-  function imagefield_tokens_help($path, $arg) {
-    switch ($path) {
-      case 'admin/help#imagefield_tokens':
-        // Return module help info.
-        $output = '';
-        $output .= '<h3>' . t('About') . '</h3>';
-        $output .= '<p>' . t('The ImageField Tokens module extends
-        the default functionality of Image Widget and Formatter and adding
-        the ability to specify default values and use content entity tokens
-        in the Alt and Title text.') . '</p>';
-        return t($output);
-    }
+
+/**
+ * Provides help notes related to the module functionality.
+ *
+ * @param string $path
+ *   Page path.
+ * @param mixed $arg
+ *   Arguments set.
+ *
+ * @return array|mixed|string|null
+ *   Returns help page data.
+ */
+function imagefield_tokens_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#imagefield_tokens':
+      // Return module help info.
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The ImageField Tokens module extends
+      the default functionality of Image Widget and Formatter and adding
+      the ability to specify default values and use content entity tokens
+      in the Alt and Title text.') . '</p>';
+      return $output;
   }
+}
