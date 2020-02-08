@@ -5,6 +5,10 @@
  * Implements image Alt and Title field defaults with support for tokens.
  */
 
+// Load all field formatter hooks for ImageField Tokens.
+$path = drupal_get_path('module', 'imagefield_tokens');
+require_once DRUPAL_ROOT . '/' . $path . '/imagefield_tokens.field.inc';
+
 /**
  * Implements hook_field_info_alter().
  */
