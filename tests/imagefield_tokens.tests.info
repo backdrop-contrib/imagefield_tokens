@@ -1,0 +1,5 @@
+[ImageFieldTokensTestCase]
+name = ImageField Tokens functionality
+description = Test ImageField using ImageField Tokens in ALT and Title fields.
+group = ImageField Tokens
+file = imagefield_tokens.test
